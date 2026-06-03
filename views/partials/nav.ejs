@@ -1,0 +1,48 @@
+<header class="bg-red-500 text-white p-4 shadow-md">
+  <nav class="container mx-auto flex justify-between items-center">
+    <ul class="flex space-x-4">
+      <li>
+        <a
+          href="/"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >airbnb</a
+        >
+      </li>
+      <li>
+        <a
+          href="/homes"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/homes' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >Homes-List</a
+        >
+      </li>
+      <li>
+        <a
+          href="/bookings"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/bookings' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >Bookings</a
+        >
+      </li>
+      <li>
+        <a
+          href="/favourites"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/favourites' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >Favourites</a
+        >
+      </li>
+      <li>
+        <a
+          href="/host/add-home"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/add-home' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >Add Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="/host/home-list"
+          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/home-list' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+          >Host Home List</a
+        >
+      </li>
+    </ul>
+  </nav>
+</header>

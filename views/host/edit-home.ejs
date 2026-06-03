@@ -1,0 +1,63 @@
+<%- include('../partials/head') %>
+  </head>
+  <body>
+    <%- include('../partials/nav') %>
+    <main class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
+      <% if (locals.editing) { %>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Edit Home of <%= home.houseName %></h1>
+        <form action="/host/edit-home" method="POST" class="max-w-md mx-auto">
+          <input type="hidden" value="<%= home.id %>" name="homeId">
+          <input
+            type="text"
+            name="houseName"
+            placeholder="Enter your House Name"
+            value="<%= home.houseName %>"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="number" name="price" value="<%= home.price %>" placeholder="Enter price per night" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+          <input
+            type="text"
+            name="image"
+            value="<%= home.image %>"
+            placeholder="Enter your House Image URL"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="number" name="ratings" value="<%= home.ratings %>" placeholder="Enter ratings out of 5" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+          <input
+            type="text"
+            name="location"
+            value="<%= home.location %>"
+            placeholder="Enter Location of your House"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="submit" value="Save" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300" />
+        </form>
+      <% } else { %>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Register Your Home on AirBnB</h1>
+        <form action="/host/add-home" method="POST" class="max-w-md mx-auto">
+          <input
+            type="text"
+            name="houseName"
+            placeholder="Enter your House Name"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="number" name="price" placeholder="Enter price per night" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+          <input
+            type="text"
+            name="image"
+            placeholder="Enter your House Image URL"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="number" name="ratings" placeholder="Enter ratings out of 5" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
+          <input
+            type="text"
+            name="location"
+            placeholder="Enter Location of your House"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+          <input type="submit" value="Submit" class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300" />
+        </form>
+      <% } %>
+    </main>
+  </body>
+</html>
