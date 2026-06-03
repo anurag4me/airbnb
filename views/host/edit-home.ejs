@@ -4,21 +4,25 @@
     <%- include('../partials/nav') %>
     <main class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
       <% if (locals.editing) { %>
-        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Edit Home of <%= home.houseName %></h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Edit Home of <%= home.name %></h1>
         <form action="/host/edit-home" method="POST" class="max-w-md mx-auto">
-          <input type="hidden" value="<%= home.id %>" name="homeId">
+          <input type="hidden" value="<%= home.id %>" name="id">
           <input
             type="text"
-            name="houseName"
+            name="name"
             placeholder="Enter your House Name"
-            value="<%= home.houseName %>"
+            value="<%= home.name %>"
             class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
+          <textarea
+            placeholder="Describe your home"
+            name="description"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"><%= home.description %></textarea>
           <input type="number" name="price" value="<%= home.price %>" placeholder="Enter price per night" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
           <input
             type="text"
-            name="image"
-            value="<%= home.image %>"
+            name="imageUrl"
+            value="<%= home.imageUrl %>"
             placeholder="Enter your House Image URL"
             class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
@@ -37,14 +41,18 @@
         <form action="/host/add-home" method="POST" class="max-w-md mx-auto">
           <input
             type="text"
-            name="houseName"
+            name="name"
             placeholder="Enter your House Name"
             class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
+          <textarea
+            placeholder="Describe your home"
+            name="description"
+            class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
           <input type="number" name="price" placeholder="Enter price per night" class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
           <input
             type="text"
-            name="image"
+            name="imageUrl"
             placeholder="Enter your House Image URL"
             class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
           />
