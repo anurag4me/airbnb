@@ -6,7 +6,7 @@
       <% if (locals.editing) { %>
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Edit Home of <%= home.name %></h1>
         <form action="/host/edit-home" method="POST" class="max-w-md mx-auto">
-          <input type="hidden" value="<%= home.id %>" name="id">
+          <input type="hidden" value="<%= home._id %>" name="_id">
           <input
             type="text"
             name="name"

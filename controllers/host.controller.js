@@ -5,15 +5,17 @@ exports.getAddHome = (req, res, next) => {
 }
 
 exports.postAddHome = (req, res, next) => {
-    const {id, name, price, description, imageUrl, location, ratings} = req.body;
-    console.log(req.body)
-    const home = new Home(id, name, price, description, imageUrl, location, ratings)
-    home.save();
+    const {_id, name, price, description, imageUrl, location, ratings} = req.body;
+    // console.log(req.body)
+    const home = new Home(_id, name, price, description, imageUrl, location, ratings)
+    home.save().then(result=>{
+        console.log("Home saved successfully", result)
+    });
     res.redirect("/host/home-list") 
   }
 
 exports.getHostHomes = (req, res, next)=>{
-    Home.fetchAll().then(([registeredHomes])=>{
+    Home.fetchAll().then(registeredHomes=>{
         res.render("host/host-home-list", {registeredHomes, pageTitle: 'Host Homes List'})
     });  
 }
@@ -21,8 +23,7 @@ exports.getHostHomes = (req, res, next)=>{
 exports.getEditHome = (req, res, next) => {
     const editing = req.query.editing === 'true';
     const homeId = req.params.homeId
-    Home.findById(homeId).then(([homes])=>{
-        const home = homes[0];
+    Home.findById(homeId).then(home=>{
         if(!home){
             // console.log("home not found for editing")
             return res.redirect("/host/home-list")   
@@ -33,9 +34,13 @@ exports.getEditHome = (req, res, next) => {
 }
 
 exports.postEditHome = (req, res, next) => {
-    const {id, name, price, description, imageUrl, location, ratings} = req.body;
-    const home = new Home(id, name, price, description, imageUrl, location, ratings)
-    home.save();
+    const {_id, name, price, description, imageUrl, location, ratings} = req.body;
+    const home = new Home(_id, name, price, description, imageUrl, location, ratings)
+    home.save().then(result=>{
+        console.log("Home updated successfully", result)
+    }).catch(err=>{
+        console.log("Error occurred during editing home details", err)
+    });
     res.redirect("/host/home-list")  
 }
 

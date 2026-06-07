@@ -5,6 +5,7 @@ const app = express();
 const path = require("path")
 const rootDir = require('./utils/pathUtil');
 const errorsController = require("./controllers/errors.controller");
+const {mongoConnect} = require("./utils/databaseUtil");
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -29,4 +30,6 @@ app.use('/host', hostRouter)
 app.use(errorsController.handlePageNotFound)
 
 const PORT=3000;
-app.listen(PORT, ()=>console.log(`server started running at http://localhost:${PORT}`));
+mongoConnect(() => {
+    app.listen(PORT, ()=>console.log(`server started running at http://localhost:${PORT}`));
+})
