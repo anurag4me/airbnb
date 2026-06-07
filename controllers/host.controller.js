@@ -7,7 +7,7 @@ exports.getAddHome = (req, res, next) => {
 exports.postAddHome = (req, res, next) => {
     const {_id, name, price, description, imageUrl, location, ratings} = req.body;
     // console.log(req.body)
-    const home = new Home(_id, name, price, description, imageUrl, location, ratings)
+    const home = new Home({name, price, description, imageUrl, location, ratings})
     home.save().then(result=>{
         console.log("Home saved successfully", result)
     });
@@ -15,7 +15,7 @@ exports.postAddHome = (req, res, next) => {
   }
 
 exports.getHostHomes = (req, res, next)=>{
-    Home.fetchAll().then(registeredHomes=>{
+    Home.find().then(registeredHomes=>{
         res.render("host/host-home-list", {registeredHomes, pageTitle: 'Host Homes List'})
     });  
 }
@@ -35,8 +35,7 @@ exports.getEditHome = (req, res, next) => {
 
 exports.postEditHome = (req, res, next) => {
     const {_id, name, price, description, imageUrl, location, ratings} = req.body;
-    const home = new Home(_id, name, price, description, imageUrl, location, ratings)
-    home.save().then(result=>{
+    const home = Home.findByIdAndUpdate(_id, {$set: {name, price, description, imageUrl, location, ratings}}).then(result=>{
         console.log("Home updated successfully", result)
     }).catch(err=>{
         console.log("Error occurred during editing home details", err)
@@ -46,7 +45,7 @@ exports.postEditHome = (req, res, next) => {
 
 exports.postDeleteHome = (req, res, next) => {
   const { homeId } = req.params;
-  Home.deleteById(homeId).then(() => {
+  Home.findByIdAndDelete(homeId).then(() => {
     res.redirect("/host/home-list");
   }).catch(err => {
     console.error("Error while deleting", err);

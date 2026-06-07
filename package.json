@@ -17,6 +17,7 @@
     "ejs": "^6.0.1",
     "express": "^5.2.1",
     "mongodb": "^6.21.0",
+    "mongoose": "^8.24.0",
     "tailwindcss": "^4.3.0"
   }
 }
