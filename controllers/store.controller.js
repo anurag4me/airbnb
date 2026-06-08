@@ -4,24 +4,28 @@ const Home = require("../models/homes.model");
 exports.getIndex = (req, res, next) => {
   Home.find().then((registeredHomes) => {
     // console.log(registeredHomes)
-    res.render("store/index", { registeredHomes, pageTitle: "Airbnb Home" });
+    res.render("store/index", {
+      registeredHomes,
+      pageTitle: "Airbnb Home",
+      isLoggedIn: req.isLoggedIn,
+    });
   });
 };
 
 exports.getHomes = (req, res, next) => {
   Home.find().then((registeredHomes) => {
-    res.render("store/home-list", { registeredHomes, pageTitle: "Homes List" });
+    res.render("store/home-list", { registeredHomes, pageTitle: "Homes List", isLoggedIn: req.isLoggedIn });
   });
 };
 
 exports.getBookings = (req, res, next) => {
-  res.render("store/bookings", { pageTitle: "My Booking" });
+  res.render("store/bookings", { pageTitle: "My Booking", isLoggedIn: req.isLoggedIn });
 };
 
 exports.getFavouriteList = (req, res, next) => {
   Favourite.find().populate('homeId').then((favourites) => {
     const favouriteHomes = favourites.map(fav=>fav.homeId);
-      res.render("store/favourite-list", { favouriteHomes, pageTitle: "My Favourites",
+      res.render("store/favourite-list", { favouriteHomes, pageTitle: "My Favourites", isLoggedIn: req.isLoggedIn
     });
   });
 };
@@ -62,6 +66,6 @@ exports.getHomeDetails = (req, res, next) => {
   const homeId = req.params.homeId;
   Home.findById(homeId).then((home) => {
     // console.log(home)
-    res.render("store/home-details", { pageTitle: "Home Detail", home });
+    res.render("store/home-details", { pageTitle: "Home Detail", home, isLoggedIn: req.isLoggedIn });
   });
 };

@@ -8,40 +8,60 @@
           >airbnb</a
         >
       </li>
+      <% if (isLoggedIn) { %>
+        <li>
+          <a
+            href="/homes"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/homes' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Homes-List</a
+          >
+        </li>
+        <li>
+          <a
+            href="/bookings"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/bookings' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Bookings</a
+          >
+        </li>
+        <li>
+          <a
+            href="/favourites"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/favourites' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Favourites</a
+          >
+        </li>
+        <li>
+          <a
+            href="/host/add-home"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/add-home' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Add Home</a
+          >
+        </li>
+        <li>
+          <a
+            href="/host/home-list"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/home-list' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Host Home List</a
+          >
+        </li>
+      <% } %>
+    </ul>
+    <ul>
       <li>
-        <a
-          href="/homes"
-          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/homes' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
-          >Homes-List</a
-        >
-      </li>
-      <li>
-        <a
-          href="/bookings"
-          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/bookings' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
-          >Bookings</a
-        >
-      </li>
-      <li>
-        <a
-          href="/favourites"
-          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/favourites' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
-          >Favourites</a
-        >
-      </li>
-      <li>
-        <a
-          href="/host/add-home"
-          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/add-home' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
-          >Add Home</a
-        >
-      </li>
-      <li>
-        <a
-          href="/host/home-list"
-          class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/host/home-list' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
-          >Host Home List</a
-        >
+        <% if (isLoggedIn) { %>
+          <form action="/logout" method="post">
+            <button
+              class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/logout' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+              >Logout</button
+            >
+          </form>
+        <% } else { %>
+          <a
+            href="/login"
+            class="py-2 px-4 rounded transition duration-300 <%= currentPath === '/login' ? 'bg-red-700 font-semibold shadow-inner' : 'hover:bg-red-400' %>"
+            >Login</a
+          >
+        <% } %>
       </li>
     </ul>
   </nav>

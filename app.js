@@ -6,6 +6,7 @@ const path = require("path")
 const rootDir = require('./utils/pathUtil');
 const errorsController = require("./controllers/errors.controller");
 const mongoConnect = require("./utils/databaseUtil");
+const authRouter = require("./routes/auth.router")
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -19,12 +20,20 @@ app.use((req, res, next)=>{
 
 app.use((req, res, next) => {
     res.locals.currentPath = req.path;
+    req.isLoggedIn = req.get('Cookie') ? req.get('Cookie').split('=')[1] === 'true' : false;
     next();
 })
 
+app.use(authRouter)
+
 app.use('/', storeRouter)
 
-app.use('/host', hostRouter)
+app.use('/host', (req, res, next) => {
+    if(!req.isLoggedIn) {
+        return res.redirect("/login")
+    }
+    next();
+}, hostRouter)
 
 // if url does not matches with any above url it will print 404
 app.use(errorsController.handlePageNotFound)

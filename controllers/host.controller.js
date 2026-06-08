@@ -1,7 +1,7 @@
 const Home = require("../models/homes.model");
 
 exports.getAddHome = (req, res, next) => {
-    res.render("host/edit-home", { pageTitle: "Airbnb Add Home" });
+    res.render("host/edit-home", { pageTitle: "Airbnb Add Home", isLoggedIn: req.isLoggedIn });
 }
 
 exports.postAddHome = (req, res, next) => {
@@ -16,7 +16,7 @@ exports.postAddHome = (req, res, next) => {
 
 exports.getHostHomes = (req, res, next)=>{
     Home.find().then(registeredHomes=>{
-        res.render("host/host-home-list", {registeredHomes, pageTitle: 'Host Homes List'})
+        res.render("host/host-home-list", {registeredHomes, pageTitle: 'Host Homes List', isLoggedIn: req.isLoggedIn})
     });  
 }
 
@@ -29,7 +29,7 @@ exports.getEditHome = (req, res, next) => {
             return res.redirect("/host/home-list")   
         } 
         // console.log(homeId, editing, home)
-        res.render("host/edit-home", {editing, home, pageTitle: 'Edit Your Home'})
+        res.render("host/edit-home", {editing, home, pageTitle: 'Edit Your Home', isLoggedIn: req.isLoggedIn})
     })
 }
 
