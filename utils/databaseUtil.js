@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const MONGO_URL = "mongodb+srv://anurag4me:anurag4me@cluster0.r7owp1k.mongodb.net/airbnb?appName=Cluster0";
+const MONGO_URL = process.env.MONGO_URL;
 
 const mongoConnect = () => mongoose.connect(MONGO_URL)
 
