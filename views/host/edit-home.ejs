@@ -3,46 +3,121 @@
 
   <body>
     <%- include('../partials/nav', {isLoggedIn}) %>
-      <main class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
-        <% if (locals.editing) { %>
-          <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Edit Home of <%= home.name %>
-          </h1>
-          <form action="/host/edit-home" method="POST" class="max-w-md mx-auto">
-            <input type="hidden" value="<%= home._id %>" name="_id">
-            <input type="text" name="name" placeholder="Enter your House Name" value="<%= home.name %>"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-            <textarea placeholder="Describe your home" name="description"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"><%= home.description %></textarea>
-            <input type="number" name="price" value="<%= home.price %>" placeholder="Enter price per night"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-            <input type="text" name="imageUrl" value="<%= home.imageUrl %>" placeholder="Enter your House Image URL"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-            <input type="string" name="ratings" value="<%= home.ratings %>" placeholder="Enter ratings out of 5"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-            <input type="text" name="location" value="<%= home.location %>" placeholder="Enter Location of your House"
-              class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-            <input type="submit" value="Save"
-              class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300" />
-          </form>
-          <% } else { %>
-            <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Register Your Home on AirBnB</h1>
-            <form action="/host/add-home" method="POST" class="max-w-md mx-auto">
-              <input type="text" name="name" placeholder="Enter your House Name"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-              <textarea placeholder="Describe your home" name="description"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
-              <input type="number" name="price" placeholder="Enter price per night"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-              <input type="text" name="imageUrl" placeholder="Enter your House Image URL"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-              <input type="number" name="ratings" placeholder="Enter ratings out of 5"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500">
-              <input type="text" name="location" placeholder="Enter Location of your House"
-                class="w-full px-4 py-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
-              <input type="submit" value="Submit"
-                class="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300" />
-            </form>
-            <% } %>
+      <main class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl mx-auto">
+          <div class="bg-white rounded-2xl shadow-lg p-8">
+            <% if (locals.editing) { %>
+              <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Listing</h1>
+                <p class="text-gray-600">Update your home details</p>
+              </div>
+              <form action="/host/edit-home" method="POST" class="space-y-6">
+                <input type="hidden" value="<%= home._id %>" name="_id">
+
+                <div>
+                  <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Home Name</label>
+                  <input id="name" type="text" name="name" value="<%= home.name %>" placeholder="Enter your house name"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                </div>
+
+                <div>
+                  <label for="description" class="block text-sm font-semibold text-gray-900 mb-2">Description</label>
+                  <textarea id="description" name="description" placeholder="Describe your home" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition h-24 resize-none"><%= home.description %></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label for="price" class="block text-sm font-semibold text-gray-900 mb-2">Price per Night
+                      (₹)</label>
+                    <input id="price" type="number" name="price" value="<%= home.price %>" placeholder="0" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                  </div>
+                  <div>
+                    <label for="ratings" class="block text-sm font-semibold text-gray-900 mb-2">Rating (0-5)</label>
+                    <input id="ratings" type="number" name="ratings" value="<%= home.ratings %>" placeholder="0"
+                      step="0.1" min="0" max="5" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="imageUrl" class="block text-sm font-semibold text-gray-900 mb-2">Image URL</label>
+                  <input id="imageUrl" type="text" name="imageUrl" value="<%= home.imageUrl %>"
+                    placeholder="https://example.com/image.jpg" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                </div>
+
+                <div>
+                  <label for="location" class="block text-sm font-semibold text-gray-900 mb-2">Location</label>
+                  <input id="location" type="text" name="location" value="<%= home.location %>"
+                    placeholder="Enter location of your house" required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                  <input type="submit" value="Save Changes"
+                    class="flex-1 bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-semibold py-3 rounded-lg transition duration-300 cursor-pointer" />
+                  <a href="/host/home-list"
+                    class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-900 font-semibold py-3 rounded-lg transition duration-300 text-center">
+                    Cancel
+                  </a>
+                </div>
+              </form>
+              <% } else { %>
+                <div class="mb-8">
+                  <h1 class="text-3xl font-bold text-gray-900 mb-2">List Your Home on AirBnB</h1>
+                  <p class="text-gray-600">Share your property and start earning</p>
+                </div>
+                <form action="/host/add-home" method="POST" class="space-y-6">
+                  <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-900 mb-2">Home Name</label>
+                    <input id="name" type="text" name="name" placeholder="Enter your house name" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                  </div>
+
+                  <div>
+                    <label for="description" class="block text-sm font-semibold text-gray-900 mb-2">Description</label>
+                    <textarea id="description" name="description" placeholder="Describe your home and its features"
+                      required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition h-24 resize-none"></textarea>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label for="price" class="block text-sm font-semibold text-gray-900 mb-2">Price per Night
+                        (₹)</label>
+                      <input id="price" type="number" name="price" placeholder="0" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                    </div>
+                    <div>
+                      <label for="ratings" class="block text-sm font-semibold text-gray-900 mb-2">Rating (0-5)</label>
+                      <input id="ratings" type="number" name="ratings" placeholder="0" step="0.1" min="0" max="5"
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label for="imageUrl" class="block text-sm font-semibold text-gray-900 mb-2">Image URL</label>
+                    <input id="imageUrl" type="text" name="imageUrl" placeholder="https://example.com/image.jpg"
+                      required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                  </div>
+
+                  <div>
+                    <label for="location" class="block text-sm font-semibold text-gray-900 mb-2">Location</label>
+                    <input id="location" type="text" name="location" placeholder="Enter location of your house" required
+                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition" />
+                  </div>
+
+                  <input type="submit" value="Create Listing"
+                    class="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-semibold py-3 rounded-lg transition duration-300 cursor-pointer" />
+                </form>
+                <% } %>
+          </div>
+        </div>
       </main>
   </body>
 

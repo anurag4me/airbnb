@@ -56,7 +56,7 @@ app.use(
 // if url does not matches with any above url it will print 404
 app.use(errorsController.handlePageNotFound);
 
-const PORT = 3000;
+const PORT = 4000;
 mongoConnect()
   .then(() => {
     console.log("Connected to MongoDB");
