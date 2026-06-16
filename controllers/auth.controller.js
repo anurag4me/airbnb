@@ -83,8 +83,18 @@ exports.postSignup = [
         })
     }
     
-    // req.session.isLoggedIn = true;
-    res.redirect("/login");
+    const user = new User({firstName, lastName, email, password, userType});
+    user.save().then(() => {
+        res.redirect("/login")
+    }).catch(err => {
+        console.log("Error while saving user", err);
+        return res.status(422).render('auth/signup', {
+            pageTitle: 'Sign Up',
+            isLoggedIn: false,
+            errorMessages: [err.message],
+            oldInput: { firstName, lastName, email, password, userType }
+        })
+    });
   },
 ];
 
