@@ -1,3 +1,6 @@
+const { check, validationResult } = require("express-validator")
+const User = require("../models/user.model")
+
 exports.getLogin = (req, res, next) => {
     res.render("auth/login", { pageTitle: 'Login Page', isLoggedIn: false})
 }
@@ -12,11 +15,78 @@ exports.postLogin = (req, res, next) => {
     res.redirect("/");
 }
 
-exports.postSignup = (req, res, next) => {
-    console.log(req.body);
+exports.postSignup = [
+  check("firstName")
+    .trim()
+    .isLength({ min: 2 })
+    .withMessage("First Name should be atleast 2 characters long")
+    .matches(/^[A-Za-z\s]+$/)
+    .withMessage("First name can only contain letters"),
+
+  check("lastName")
+    .matches(/^[A-Za-z\s]*$/)
+    .withMessage("Last name can only contain letters"),
+
+  check("email")
+    .isEmail()
+    .withMessage("Please enter a valid email")
+    .normalizeEmail(),
+
+  check("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 character long")
+    .matches(/[a-z]/)
+    .withMessage("Password must contain at least one lowercase letter")
+    .matches(/[A-Z]/)
+    .withMessage("Password must contain at least one uppercase letter")
+    .matches(/[0-9]/)
+    .withMessage("Password must contain at least one number")
+    .matches(/[!@#$%^&*()_+]/)
+    .withMessage("Password must contain at least one special character")
+    .trim(),
+
+  check("confirmPassword")
+    .trim()
+    .custom((val, { req }) => {
+      if (val !== req.body.password) {
+        throw new Error("Password do not match");
+      }
+      return true;
+    }),
+
+  check("userType")
+    .notEmpty()
+    .withMessage("Please select a user type")
+    .isIn(["guest", "host"])
+    .withMessage("Invalid user type"),
+
+  check("terms")
+    .notEmpty()
+    .withMessage("Please accept the terms and conditions")
+    .custom((val, { req }) => {
+      if (val !== "on") {
+        throw new Error("Please accept the terms and conditions");
+      }
+      return true;
+    }),
+
+  (req, res, next) => {
+    const { firstName, lastName, email, password, userType } = req.body;
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        return res.status(422).render('auth/signup', {
+            pageTitle: 'Sign Up',
+            isLoggedIn: false,
+            errorMessages: errors.array().map(error => error.msg),
+            oldInput: { firstName, lastName, email, password, userType }
+        })
+    }
+    
     // req.session.isLoggedIn = true;
     res.redirect("/login");
-}
+  },
+];
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy(()=>{
