@@ -3,11 +3,11 @@ const User = require("../models/user.model")
 const bcrypt = require("bcryptjs")
 
 exports.getLogin = (req, res, next) => {
-    res.render("auth/login", { pageTitle: 'Login Page', isLoggedIn: false})
+    res.render("auth/login", { pageTitle: 'Login Page', isLoggedIn: false, user: {}})
 }
 
 exports.getSignup = (req, res, next) => {
-    res.render("auth/signup", { pageTitle: 'Signup Page', isLoggedIn: false})
+    res.render("auth/signup", { pageTitle: 'Signup Page', isLoggedIn: false, user: {}})
 }
 
 exports.postLogin = [
@@ -33,10 +33,11 @@ exports.postLogin = [
         const { email, password } = req.body;
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            res.render("auth/login", {
+            return res.render("auth/login", {
                 pageTitle: 'Sign Up Page',
                 isLoggedIn: false,
                 errorMessages: errors.array().map(error => error.msg),
+                user: {},
             })
         }
 
@@ -47,6 +48,7 @@ exports.postLogin = [
                 isLoggedIn: false,
                 errorMessages: ['Invalid email'],
                 oldInput: { email },
+                user: {},
             })
         }
 
@@ -57,6 +59,7 @@ exports.postLogin = [
                 isLoggedIn: false,
                 errorMessages: ['Invalid Password'],
                 oldInput: { email },
+                user: {},
             })
         }
         
@@ -147,7 +150,8 @@ exports.postSignup = [
             pageTitle: 'Sign Up Page',
             isLoggedIn: false,
             errorMessages: [err.message],
-            oldInput: { firstName, lastName, email, password, userType }
+            oldInput: { firstName, lastName, email, password, userType },
+            user: {},
         })
     });
     
