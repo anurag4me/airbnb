@@ -1,3 +1,4 @@
+const path = require("path");
 const Home = require("../models/homes.model");
 const fs = require("fs")
 
@@ -9,27 +10,50 @@ exports.getAddHome = (req, res, next) => {
   });
 };
 
-exports.postAddHome = (req, res, next) => {
-  const { _id, name, price, description, location, ratings } = req.body;
-  console.log(req.body)
-  console.log(req.file)
+exports.postAddHome = async (req, res, next) => {
+  try {
+    const {
+      _id,
+      name,
+      price,
+      description,
+      location,
+      ratings
+    } = req.body;
 
-  if(!req.file) {
-    return res.status(422).send("No Image provided");
-  }
+    const home = new Home({
+      name,
+      price,
+      description,
+      photo: req.files.photo?.[0].filename || null,
+      rule: req.files.rule?.[0]?.filename || null,
+      location,
+      ratings
+    });
 
-  const home = new Home({
-    name,
-    price,
-    description,
-    photo: req.file.path,
-    location,
-    ratings,
-  });
-  home.save().then((result) => {
+    let result = await home.save();
+
+    const pdfFile = req.files.rule?.[0];
+
+    if (pdfFile) {
+      const newFileName = `${home._id}.pdf`;
+
+      await fs.promises.rename(
+        pdfFile.path,
+        path.join('uploads', 'rules', newFileName)
+      );
+
+      home.rule = newFileName;
+      result = await home.save();
+    }
+
     console.log("Home saved successfully", result);
-  });
-  res.redirect("/host/home-list");
+
+    res.redirect("/host/home-list");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 };
 
 exports.getHostHomes = (req, res, next) => {
@@ -62,36 +86,80 @@ exports.getEditHome = (req, res, next) => {
   });
 };
 
-exports.postEditHome = (req, res, next) => {
-  const { _id, name, price, description, photo, location, ratings } = req.body;
-  Home.findById(_id)
-    .then(home => {
-      home.name = name;
-      home.price = price;
-      home.description = description;
-      home.location = location;
-      home.ratings = ratings;
+exports.postEditHome = async (req, res, next) => {
+  try {
+    const {
+      _id,
+      name,
+      price,
+      description,
+      location,
+      ratings
+    } = req.body;
 
-      if(req.file) {
-        fs.unlink(home.photo, err=>{
-          if(err) {
-            console.log("Error while deleting file", err)
+    const home = await Home.findById(_id);
+
+    if (!home) {
+      return res.status(404).send("Home not found");
+    }
+
+    home.name = name;
+    home.price = price;
+    home.description = description;
+    home.location = location;
+    home.ratings = ratings;
+
+    // PHOTO UPDATE
+    const newPhoto = req.files?.photo?.[0];
+
+    if (newPhoto) {
+      if (home.photo) {
+        const oldPhotoPath = path.join(
+          "uploads",
+          "homes",
+          home.photo
+        );
+
+        fs.unlink(oldPhotoPath, (err) => {
+          if (err) {
+            console.log("Error deleting old photo:", err);
           }
         });
-        home.photo = req.file.path;
       }
 
-      home
-        .save()
-        .then((result) => {
-          console.log("Home updated successfully", result);
-        })
-        .catch((err) => {
-          console.log("Error occurred during editing home details", err);
-        });
-        res.redirect("/host/home-list");
-    })
-    
+      home.photo = newPhoto.filename;
+    }
+
+    // RULE PDF UPDATE
+    const newRule = req.files?.rule?.[0];
+
+    if (newRule) {
+      const pdfName = `${home._id}.pdf`;
+
+      const targetPath = path.join(
+        "uploads",
+        "rules",
+        pdfName
+      );
+
+      if(fs.existsSync(targetPath)){
+        await fs.promises.unlink(targetPath);
+      }
+
+      await fs.promises.rename( newRule.path, targetPath);
+
+      home.rule = pdfName;
+    }
+
+    const result = await home.save();
+
+    console.log("Home updated successfully", result);
+
+    res.redirect("/host/home-list");
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 };
 
 exports.postDeleteHome = (req, res, next) => {

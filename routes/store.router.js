@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const path = require("path");
-const rootDir = require("../utils/pathUtil.js");
 const storeController = require("../controllers/store.controller.js");
 
 router
@@ -11,5 +10,6 @@ router
   .post("/favourites", storeController.postAddToFavourite)
   .get("/homes/:homeId", storeController.getHomeDetails)
   .post("/delete-favourite/:homeId", storeController.postRemoveFromFavourite)
+  .get("/rules/:homeId", storeController.getHomeRules)
 
 module.exports = router;

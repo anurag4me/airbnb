@@ -1,5 +1,6 @@
 const Home = require("../models/homes.model");
 const User = require("../models/user.model");
+const path = require("path");
 
 exports.getIndex = (req, res, next) => {
   Home.find().then((registeredHomes) => {
@@ -81,3 +82,19 @@ exports.getHomeDetails = (req, res, next) => {
     });
   });
 };
+
+exports.getHomeRules = async (req, res, next) => {
+  const homeId = req.params.homeId;
+  const home = await Home.findById(homeId);
+  if(!req.session.isLoggedIn) {
+    return res.render("store/home-details", {
+      pageTitle: "Home Detail",
+      home,
+      isLoggedIn: req.session.isLoggedIn,
+      user: req.session.user,
+      errorMessages: ['Please login first to download rules pdf'],
+    });
+  }
+  const filePath = path.join("uploads", "rules", home.rule);
+  res.download(filePath, 'Rules.pdf');
+}

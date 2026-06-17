@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("./user.model");
 
 const homeSchema = new mongoose.Schema({
   name: {
@@ -18,13 +19,27 @@ const homeSchema = new mongoose.Schema({
     required: true,
   },
   photo: String,
+  rule: String,
   description: String,
 });
 
-// homeSchema.pre('findOneAndDelete', async function(next){
-//   const homeId = this.getQuery()._id;
-//   await Favourite.deleteMany({homeId});
-//   next();
-// })
+homeSchema.pre('findOneAndDelete', async function(next) {
+  try {
+    const homeId = this.getQuery()._id;
+
+    await User.updateMany(
+      {},
+      {
+        $pull: {
+          favourites: homeId
+        }
+      }
+    );
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = mongoose.model("Home", homeSchema);
