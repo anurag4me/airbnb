@@ -23,6 +23,7 @@
     "express-validator": "^7.3.2",
     "mongodb": "^6.21.0",
     "mongoose": "^8.24.0",
+    "multer": "^2.2.0",
     "tailwindcss": "^4.3.0"
   }
 }

@@ -1,4 +1,5 @@
 const Home = require("../models/homes.model");
+const fs = require("fs")
 
 exports.getAddHome = (req, res, next) => {
   res.render("host/edit-home", {
@@ -9,14 +10,19 @@ exports.getAddHome = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { _id, name, price, description, imageUrl, location, ratings } =
-    req.body;
-  // console.log(req.body)
+  const { _id, name, price, description, location, ratings } = req.body;
+  console.log(req.body)
+  console.log(req.file)
+
+  if(!req.file) {
+    return res.status(422).send("No Image provided");
+  }
+
   const home = new Home({
     name,
     price,
     description,
-    imageUrl,
+    photo: req.file.path,
     location,
     ratings,
   });
@@ -57,18 +63,35 @@ exports.getEditHome = (req, res, next) => {
 };
 
 exports.postEditHome = (req, res, next) => {
-  const { _id, name, price, description, imageUrl, location, ratings } =
-    req.body;
-  const home = Home.findByIdAndUpdate(_id, {
-    $set: { name, price, description, imageUrl, location, ratings },
-  })
-    .then((result) => {
-      console.log("Home updated successfully", result);
+  const { _id, name, price, description, photo, location, ratings } = req.body;
+  Home.findById(_id)
+    .then(home => {
+      home.name = name;
+      home.price = price;
+      home.description = description;
+      home.location = location;
+      home.ratings = ratings;
+
+      if(req.file) {
+        fs.unlink(home.photo, err=>{
+          if(err) {
+            console.log("Error while deleting file", err)
+          }
+        });
+        home.photo = req.file.path;
+      }
+
+      home
+        .save()
+        .then((result) => {
+          console.log("Home updated successfully", result);
+        })
+        .catch((err) => {
+          console.log("Error occurred during editing home details", err);
+        });
+        res.redirect("/host/home-list");
     })
-    .catch((err) => {
-      console.log("Error occurred during editing home details", err);
-    });
-  res.redirect("/host/home-list");
+    
 };
 
 exports.postDeleteHome = (req, res, next) => {

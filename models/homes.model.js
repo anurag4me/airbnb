@@ -17,9 +17,9 @@ const homeSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  imageUrl: String,
+  photo: String,
   description: String,
-})
+});
 
 // homeSchema.pre('findOneAndDelete', async function(next){
 //   const homeId = this.getQuery()._id;
@@ -27,4 +27,4 @@ const homeSchema = new mongoose.Schema({
 //   next();
 // })
 
-module.exports = mongoose.model("Home", homeSchema)
+module.exports = mongoose.model("Home", homeSchema);
